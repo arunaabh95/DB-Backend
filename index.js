@@ -14,7 +14,7 @@ app.use("/", router);
 app.use(cors());
 
 const sqlConnection = mysql.createPool( {
-  host: "database-1.c46mesfnpyxo.us-east-1.rds.amazonaws.com",
+  host: "http://database-1.c7si7t7vgrgx.us-east-1.rds.amazonaws.com/",
   user: "admin",
   password: "dbproject123",
   database: "Instacart",
