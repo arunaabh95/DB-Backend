@@ -22,8 +22,8 @@ router.post("/mysql", function (req, res) {
   const config = {
     host: "database-1.c46mesfnpyxo.us-east-1.rds.amazonaws.com",
     user: "admin",
-    password: "12345678",
-    database: "abc-retail",
+    password: "dbproject123",
+    database: "Instacart",
     port: 3306,
   };
   const query = req.body.query;
