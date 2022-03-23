@@ -33,15 +33,15 @@ router.post("/mysql", function (req, res) {
   connectionType = "mysql";
   // Executing the MySQL query (select all data from the 'users' table).
   const startTime = Date.now();
-  connection.query(query, function (error, results, fields) {
+  connection.query(query, function (error, results) {
     // If some error occurs, we throw an error.
     if (error) console.log(error);
     const time = Date.now() - startTime;
     console.log(results);
-    console.log(fields);
     res.set('Access-Control-Allow-Origin', "*");
+    res.set('Content-Type', 'application/json');
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
-    res.send({results: results, time: time});
+    res.send({results: results, error: error, time: time});
   });
 });
 
@@ -66,9 +66,11 @@ app.post("/reshift", function (req, res) {
         // If some error occurs, we throw an error.
         if (error) console.log(error);
         console.log(results);
+        res.set('Access-Control-Allow-Origin', "*");
+        res.set('Content-Type', 'application/json');
         // Getting the 'response' from the database and sending it to our route. This is were the data is.
-        res.send({results, time});
-    });
+        res.send({results: results, error: error, time: time});
+      });
 });
 // Starting our server.
 
