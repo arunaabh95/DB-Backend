@@ -8,11 +8,15 @@ const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use("/", router);
 app.use(cors());
 
 connection = null;
 connectionType = "";
+
+router.options('*', cors());
+
 // Creating a POST route that returns data from the 'users' table.
 router.post("/mysql", function (req, res) {
   const config = {
@@ -31,6 +35,8 @@ router.post("/mysql", function (req, res) {
     connection = mysql.createConnection(config);
   }
   connectionType = "mysql";
+  res.set('Access-Control-Allow-Origin', "*");
+  res.set('Content-Type', 'application/json');
   // Executing the MySQL query (select all data from the 'users' table).
   const startTime = Date.now();
   connection.query(query, function (error, results) {
@@ -38,8 +44,6 @@ router.post("/mysql", function (req, res) {
     if (error) console.log(error);
     const time = Date.now() - startTime;
     console.log(results);
-    res.set('Access-Control-Allow-Origin', "*");
-    res.set('Content-Type', 'application/json');
     // Getting the 'response' from the database and sending it to our route. This is were the data is.
     res.send({results: results, error: error, time: time});
   });
@@ -61,13 +65,13 @@ app.post("/reshift", function (req, res) {
         connection = new Redshift(config);
       }
       connectionType = "mysql";
+      res.set('Access-Control-Allow-Origin', "*");
+      res.set('Content-Type', 'application/json');
       // Executing the MySQL query (select all data from the 'users' table).
       connection.query(query, function (error, results) {
         // If some error occurs, we throw an error.
         if (error) console.log(error);
         console.log(results);
-        res.set('Access-Control-Allow-Origin', "*");
-        res.set('Content-Type', 'application/json');
         // Getting the 'response' from the database and sending it to our route. This is were the data is.
         res.send({results: results, error: error, time: time});
       });
