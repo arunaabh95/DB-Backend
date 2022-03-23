@@ -32,7 +32,7 @@ router.post("/mysql", function (req, res) {
       if (connectionType != "") {
           connection.close();
       }
-    connection = mysql.createConnection(config);
+  connection = mysql.createPool(config);
   }
   connectionType = "mysql";
   res.set('Access-Control-Allow-Origin', "*");
