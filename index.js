@@ -5,6 +5,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const PORT = process.env.PORT || 3000;
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", router);
 app.use(cors());
@@ -70,7 +72,7 @@ app.post("/reshift", function (req, res) {
 });
 // Starting our server.
 
-server = app.listen(3000, () => {
+server = app.listen(PORT, () => {
   console.log("Go to http://localhost:3000/mysql to see hello world");
 });
 
