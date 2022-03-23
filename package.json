@@ -15,5 +15,8 @@
     "express": "^4.17.3",
     "mysql": "^2.18.1",
     "node-redshift": "^0.1.5"
+  },
+  "engines": {
+    "node": "16.13.0"
   }
 }
