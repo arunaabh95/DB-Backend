@@ -4,7 +4,7 @@ const mysql = require("mysql");
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const Redshift = require("node-redshift/lib/connection");
+const Redshift = require("node-redshift");
 
 const PORT = process.env.PORT || 3000;
 
@@ -49,12 +49,14 @@ router.post("/mysql", function (req, res) {
   });
 });
 
- app.post("/redshift", function (req, res) { 
+ router.post("/redshift", function (req, res) { 
       const query = req.body.query;
       res.set('Access-Control-Allow-Origin', "*");
       res.set('Content-Type', 'application/json');
+      // console.log("Before running query");
       // Executing the MySQL query (select all data from the 'users' table).
       redshiftConnection.query(query, function (error, results) {
+        // console.log("Query ran");
         // If some error occurs, we throw an error.
         if (error) console.log(error);
         console.log(results);
