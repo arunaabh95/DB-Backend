@@ -49,7 +49,7 @@ router.post("/mysql", function (req, res) {
   });
 });
 
- app.post("/reshift", function (req, res) { 
+ app.post("/redshift", function (req, res) { 
       const query = req.body.query;
       res.set('Access-Control-Allow-Origin', "*");
       res.set('Content-Type', 'application/json');
