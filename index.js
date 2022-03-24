@@ -22,9 +22,9 @@ const sqlConnection = mysql.createConnection( {
 });
 
 const redshiftConnection = new Redshift({
-  host: "redshift-cluster-1.cg1tjsuz22s0.us-east-1.redshift.amazonaws.com:5439/dev",
+  host: "redshift-cluster-1.cxze2a4aylyf.us-east-1.redshift.amazonaws.com",
   user: "admin",
-  password: "Ashawonderilla#1",
+  password: "dbProject123",
   database: "dev",
   port: 5439,
 });
@@ -49,21 +49,24 @@ router.post("/mysql", function (req, res) {
   });
 });
 
- router.post("/redshift", function (req, res) { 
-      const query = req.body.query;
-      res.set('Access-Control-Allow-Origin', "*");
-      res.set('Content-Type', 'application/json');
-      // console.log("Before running query");
-      // Executing the MySQL query (select all data from the 'users' table).
-      redshiftConnection.query(query, function (error, results) {
-        // console.log("Query ran");
-        // If some error occurs, we throw an error.
-        if (error) console.log(error);
-        console.log(results);
-        // Getting the 'response' from the database and sending it to our route. This is were the data is.
-        res.send({results: results, error: error, time: time});
-      });
-}); 
+ // Creating a POST route that returns data from the 'users' table.
+router.post("/redshift", function (req, res) {
+  const query = req.body.query;
+  console.log(req.body);
+  res.set('Access-Control-Allow-Origin', "*");
+  res.set('Content-Type', 'application/json');
+  console.log(redshiftConnection);
+  // Executing the MySQL query (select all data from the 'users' table).
+  const startTime = Date.now();
+  redshiftConnection.query(query, function (error, results) {
+    // If some error occurs, we throw an error.
+    if (error) console.log(error);
+    const time = Date.now() - startTime;
+    console.log(results);
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send({results: results, error: error, time: time});
+  });
+});
 // Starting our server.
 
 server = app.listen(PORT, () => {
