@@ -21,14 +21,14 @@ const sqlConnection = mysql.createConnection( {
   port: 3306,
 });
 
-/* const redshiftConnection = new Redshift({
-  host: "database-1.c46mesfnpyxo.us-east-1.rds.amazonaws.com",
+const redshiftConnection = new Redshift({
+  host: "redshift-cluster-1.cg1tjsuz22s0.us-east-1.redshift.amazonaws.com:5439/dev",
   user: "admin",
-  password: "12345678",
-  database: "abc-retail",
-  port: 3306,
+  password: "Ashawonderilla#1",
+  database: "dev",
+  port: 5439,
 });
-*/
+
 router.options('*', cors());
 
 // Creating a POST route that returns data from the 'users' table.
@@ -49,7 +49,7 @@ router.post("/mysql", function (req, res) {
   });
 });
 
-/* app.post("/reshift", function (req, res) { 
+ app.post("/reshift", function (req, res) { 
       const query = req.body.query;
       res.set('Access-Control-Allow-Origin', "*");
       res.set('Content-Type', 'application/json');
@@ -61,7 +61,7 @@ router.post("/mysql", function (req, res) {
         // Getting the 'response' from the database and sending it to our route. This is were the data is.
         res.send({results: results, error: error, time: time});
       });
-}); */
+}); 
 // Starting our server.
 
 server = app.listen(PORT, () => {
@@ -72,7 +72,7 @@ function cleanup () {
     shutting_down = true;
     server.close( function () {
         console.log( "Closed out remaining connections.");
-        // redshiftConnection.close();
+        redshiftConnection.close();
         sqlConnection.end();
         // Close db connections, other chores, etc.
         process.exit();
