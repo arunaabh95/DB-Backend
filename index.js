@@ -23,7 +23,6 @@ const sqlConnection = mysql.createConnection( {
 
 router.options('*', cors());
 
-// Creating a POST route that returns data from the 'users' table.
 router.post("/mysql", function (req, res) {
   const query = req.body.query;
   console.log(req.body);
