@@ -5,7 +5,9 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const redshift = require('./redshift');
+const Connection = require("mysql/lib/Connection");
 const PORT = process.env.PORT || 3000;
+let sqlDbName = "Instacart"; 
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -25,6 +27,16 @@ router.options('*', cors());
 
 router.post("/mysql", function (req, res) {
   const query = req.body.query;
+  const dbName = req.body.dbName;
+  if (sqlDbName != dbName) {
+    sqlConnection.changeUser({database: dbName}, function (err) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      sqlDbName = dbName;
+    });
+  }
   console.log(req.body);
   res.set('Access-Control-Allow-Origin', "*");
   res.set('Content-Type', 'application/json');
@@ -43,11 +55,12 @@ router.post("/mysql", function (req, res) {
  // Creating a POST route that returns data from the 'users' table.
 router.post("/redshift", function (req, res) {
   const query = req.body.query;
+  const dbName = req.body.dbName;
   console.log(req.body);
   res.set('Access-Control-Allow-Origin', "*");
   res.set('Content-Type', 'application/json');
   // Executing the MySQL query (select all data from the 'users' table).
-  redshift.executeQuery(query).then((results) => res.send(results));
+  redshift.executeQuery(query, dbName).then((results) => res.send(results));
 });
 // Starting our server.
 
