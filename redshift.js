@@ -41,8 +41,8 @@ async function executeQuery(query, databaseName) {
   try {
     const date1 = new Date().getTime();
     const connection = getConnection(databaseName);
+    console.log(connection);
     const result = await connection.query(query);
-
     const date2 = new Date().getTime();
     const durationMs = date2 - date1;
     const durationSeconds = Math.round(durationMs / 1000);

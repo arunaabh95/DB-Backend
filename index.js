@@ -5,16 +5,15 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const redshift = require('./redshift');
-const Connection = require("mysql/lib/Connection");
 const PORT = process.env.PORT || 3000;
-let sqlDbName = "Instacart"; 
+let connectionMap = {}; 
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/", router);
 app.use(cors());
 
-const sqlConnection = mysql.createConnection( {
+const instacartSqlConnection = mysql.createConnection( {
   host: "database-1.c7si7t7vgrgx.us-east-1.rds.amazonaws.com",
   user: "admin",
   password: "dbproject123",
@@ -22,27 +21,37 @@ const sqlConnection = mysql.createConnection( {
   port: 3306,
 });
 
+const abcSqlConnection = mysql.createConnection( {
+  host: "database-1.c7si7t7vgrgx.us-east-1.rds.amazonaws.com",
+  user: "admin",
+  password: "dbproject123",
+  database: "ABCRetail",
+  port: 3306,
+});
+
+
+connectionMap["Instacart"] = instacartSqlConnection;
+connectionMap["ABCRetail"] = abcSqlConnection;
 
 router.options('*', cors());
 
 router.post("/mysql", function (req, res) {
   const query = req.body.query;
   const dbName = req.body.dbName;
-  if (sqlDbName != dbName) {
-    sqlConnection.changeUser({database: dbName}, function (err) {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      sqlDbName = dbName;
-    });
+  console.log(dbName);
+  console.log(query);
+  let connection = connectionMap[dbName];
+  if (!connection) {
+    console.log("Here");
+    res.send({results:null, err:"No connection found for database: " + dbName, time:-1});
+    return;
   }
   console.log(req.body);
   res.set('Access-Control-Allow-Origin', "*");
   res.set('Content-Type', 'application/json');
   // Executing the MySQL query (select all data from the 'users' table).
   const startTime = Date.now();
-  sqlConnection.query(query, function (error, results) {
+  connection.query(query, function (error, results) {
     // If some error occurs, we throw an error.
     if (error) console.log(error);
     const time = Date.now() - startTime;
@@ -72,7 +81,8 @@ function cleanup () {
     shutting_down = true;
     server.close( function () {
         console.log( "Closed out remaining connections.");
-        sqlConnection.end();
+        instacartSqlConnection.end();
+        abcSqlConnection.end();
         // Close db connections, other chores, etc.
         process.exit();
     });
