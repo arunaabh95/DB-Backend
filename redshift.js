@@ -4,8 +4,8 @@ const connections = [];
 
 const config1 = {
   dbHost: "redshift-cluster-1.c7z1wfawacda.us-east-1.redshift.amazonaws.com",
-  dbUser: "dev",
-  dbPassword: "Goforit123!",
+  dbUser: "admin",
+  dbPassword: "Dbproject123!",
   databaseName: "abc_retail",
 };
 
@@ -41,7 +41,6 @@ async function executeQuery(query, databaseName) {
   try {
     const date1 = new Date().getTime();
     const connection = getConnection(databaseName);
-    console.log(connection);
     const result = await connection.query(query);
     const date2 = new Date().getTime();
     const durationMs = date2 - date1;

@@ -25,13 +25,13 @@ const abcSqlConnection = mysql.createConnection( {
   host: "database-1.c7si7t7vgrgx.us-east-1.rds.amazonaws.com",
   user: "admin",
   password: "dbproject123",
-  database: "ABCRetail",
+  database: "ABCRetail_N",
   port: 3306,
 });
 
 
 connectionMap["Instacart"] = instacartSqlConnection;
-connectionMap["ABCRetail"] = abcSqlConnection;
+connectionMap["ABCRetail_N"] = abcSqlConnection;
 
 router.options('*', cors());
 
