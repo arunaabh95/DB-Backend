@@ -13,7 +13,7 @@ const config2 = {
   dbHost: "redshift-cluster-1.cg1tjsuz22s0.us-east-1.redshift.amazonaws.com",
   dbUser: "anusha1",
   dbPassword: "Ashawonderilla#1",
-  databaseName: "dev",
+  databaseName: "instacart",
 };
 
 async function makeConnection(config, databaseName) {
